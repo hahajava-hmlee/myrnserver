@@ -25,4 +25,14 @@ public class UserService {
         return null;
     }
 
+    public User registerUser(User user) {
+        String rawPw = user.getUserPw();
+        String encodedPw = passwordEncoder.encode(rawPw);
+        user.setUserPw(encodedPw);
+        return userRepository.save(user);
+    }
+
+    public User getUser(String userId) {
+        return userRepository.findById(userId);
+    }
 }

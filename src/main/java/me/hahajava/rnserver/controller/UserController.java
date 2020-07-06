@@ -1,41 +1,41 @@
 package me.hahajava.rnserver.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import me.hahajava.rnserver.model.User;
-import me.hahajava.rnserver.persistence.UserRepository;
 import me.hahajava.rnserver.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@Slf4j
 @AllArgsConstructor
 @RestController
 public class UserController {
 
-	private final UserRepository userRepository;
-	private final PasswordEncoder passwordEncoder;
 	private final UserService userService;
 
 	@GetMapping("/user/{userId}")
 	public ResponseEntity<User> getUserProfile(@PathVariable String userId) {
-		return new ResponseEntity<>(userRepository.findById(userId), HttpStatus.OK);
+		return new ResponseEntity<>(userService.getUser(userId), HttpStatus.OK);
 	}
 
 	@PostMapping("/user")
 	public ResponseEntity<String> addUserProfile(@RequestBody @Valid User user, BindingResult br) {
+
 		if (br.hasErrors()) {
 			return new ResponseEntity<>(br.getAllErrors().get(0).toString(), HttpStatus.BAD_REQUEST);
 		}
 
-		String cryptPassword = passwordEncoder.encode(user.getUserPw());
-		user.setUserPw(cryptPassword);
-
-		userRepository.save(user);
+		try {
+			userService.registerUser(user);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			return new ResponseEntity<>("failed", HttpStatus.NOT_ACCEPTABLE);
+		}
 		return new ResponseEntity<>("success", HttpStatus.OK);
 	}
 
