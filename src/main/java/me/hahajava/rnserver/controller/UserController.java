@@ -1,6 +1,7 @@
 package me.hahajava.rnserver.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import me.hahajava.rnserver.model.User;
 import me.hahajava.rnserver.persistence.UserRepository;
 import me.hahajava.rnserver.service.UserService;
@@ -46,5 +47,10 @@ public class UserController {
 		}
 		return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
 	}
+
+	@GetMapping("/api/**")
+    public String test(){
+	    return "test";
+    }
 
 }
