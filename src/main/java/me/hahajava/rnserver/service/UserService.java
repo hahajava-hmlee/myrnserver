@@ -26,8 +26,8 @@ public class UserService {
     }
 
     public User registerUser(User user) {
-        String rawPw = user.getUserPw();
-        String encodedPw = passwordEncoder.encode(rawPw);
+        final String rawPw = user.getUserPw();
+        final String encodedPw = passwordEncoder.encode(rawPw);
         user.setUserPw(encodedPw);
         return userRepository.save(user);
     }

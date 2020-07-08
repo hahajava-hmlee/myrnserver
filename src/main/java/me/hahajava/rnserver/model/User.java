@@ -13,20 +13,17 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "no")
+	@Column(name = "NO")
 	private Long userNo;
 
 	@NotNull
-	@Column(nullable = false,
-			unique = true,
-			name = "userId")
+	@Column(name = "USER_ID", nullable = false, unique = true)
 	private String id;
 
 	@NotNull
-	@Column(nullable = false, name = "USER_PW")
+	@Column(name = "USER_PW", nullable = false)
 	private String userPw;
 
-	@NotNull
 	@Column(name = "TOKEN")
 	private String token;
 

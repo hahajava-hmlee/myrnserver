@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.hahajava.rnserver.model.User;
 import me.hahajava.rnserver.service.UserService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -18,8 +19,9 @@ public class UserController {
 
 	private final UserService userService;
 
+	@Profile("dev")
 	@GetMapping("/user/{userId}")
-	public ResponseEntity<User> getUserProfile(@PathVariable String userId) {
+	public ResponseEntity<User> getUser(@PathVariable String userId) {
 		return new ResponseEntity<>(userService.getUser(userId), HttpStatus.OK);
 	}
 
@@ -27,16 +29,17 @@ public class UserController {
 	public ResponseEntity<String> addUserProfile(@RequestBody @Valid User user, BindingResult br) {
 
 		if (br.hasErrors()) {
-			return new ResponseEntity<>(br.getAllErrors().get(0).toString(), HttpStatus.BAD_REQUEST);
+			String firstErrorMsg = br.getAllErrors().get(0).toString();
+			return new ResponseEntity<>(firstErrorMsg, HttpStatus.BAD_REQUEST);
 		}
 
 		try {
 			userService.registerUser(user);
 		} catch (Exception e) {
 			log.error(e.getMessage());
-			return new ResponseEntity<>("failed", HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
-		return new ResponseEntity<>("success", HttpStatus.OK);
+		return new ResponseEntity<>( HttpStatus.OK);
 	}
 
 	@PostMapping("/user/login")
@@ -45,12 +48,7 @@ public class UserController {
 		if (apiKey != null) {
 			return new ResponseEntity<>(apiKey, HttpStatus.ACCEPTED);
 		}
-		return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 	}
-
-	@GetMapping("/api/**")
-    public String test(){
-	    return "test";
-    }
 
 }

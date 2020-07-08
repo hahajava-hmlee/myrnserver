@@ -14,8 +14,4 @@ public class BeanConfig {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
 
-	@Bean
-	public DelegatingFilterProxy loginFilterFilterRegistrationBean(){
-		return new DelegatingFilterProxy("loginFilter");
-	}
 }
