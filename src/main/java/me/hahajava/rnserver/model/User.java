@@ -1,6 +1,5 @@
 package me.hahajava.rnserver.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,21 +13,18 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "no")
+	@Column(name = "NO")
 	private Long userNo;
 
 	@NotNull
-	@Column(nullable = false, unique = true)
+	@Column(name = "USER_ID", nullable = false, unique = true)
 	private String id;
 
 	@NotNull
-	@Column(nullable = false)
+	@Column(name = "USER_PW", nullable = false)
 	private String userPw;
 
-	@NotNull
+	@Column(name = "TOKEN")
 	private String token;
 
-	@JsonIgnore
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-	private Profile profile;
 }
